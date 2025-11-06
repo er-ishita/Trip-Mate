@@ -18,8 +18,8 @@ document.addEventListener("mousemove", (e) => {
   const pixel = grid.children[index];
 
   if (pixel) {
-    pixel.style.backgroundColor = "rgb(237, 83, 248)";
-    pixel.style.boxShadow = "0 0 20px rgb(237, 83, 248)";
+    pixel.style.backgroundColor = "#a855f7";
+    pixel.style.boxShadow = "0 0 20px #a855f7";
     setTimeout(() => {
       pixel.style.backgroundColor = "#1a1a2a";
       pixel.style.boxShadow = "none";
