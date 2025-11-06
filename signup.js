@@ -1,3 +1,4 @@
+// =================== PIXEL GRID (unchanged) ===================
 const grid = document.getElementById("pixelGrid");
 const pixelSize = 64;
 const columns = Math.ceil(window.innerWidth / pixelSize);
@@ -26,13 +27,28 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-window.addEventListener("resize", () => {
-});
+window.addEventListener("resize", () => {});
+
+// =================== FIREBASE SIGNUP + TOASTIFY ===================
+import { auth } from "./firebase.js";
+import { createUserWithEmailAndPassword, updateProfile } 
+  from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const form = document.getElementById("signup-form");
 const submitBtn = form.querySelector('button[type="submit"]');
 
-const API_BASE = "http://127.0.0.1:5000";
+// 🔔 Toastify helper
+function showToast(msg, color = "#a855f7") {
+  Toastify({
+    text: msg,
+    duration: 3000,
+    gravity: "top",
+    position: "right",
+    backgroundColor: color,
+    stopOnFocus: true,
+    close: true
+  }).showToast();
+}
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -42,37 +58,23 @@ form.addEventListener("submit", async (e) => {
   const password = form.elements[2].value || "";
   const confirm_password = form.elements[3].value || "";
 
-  if (!full_name) return alert("Full name is required.");
-  if (!email) return alert("Email is required.");
-  if (password.length < 6) return alert("Password must be at least 6 characters.");
-  if (password !== confirm_password) return alert("Passwords do not match.");
+  if (!full_name) return showToast("Full name is required.", "crimson");
+  if (!email) return showToast("Email is required.", "crimson");
+  if (password.length < 6) return showToast("Password must be at least 6 characters.", "crimson");
+  if (password !== confirm_password) return showToast("Passwords do not match.", "crimson");
 
   submitBtn.disabled = true;
   submitBtn.textContent = "Creating...";
 
   try {
-    const resp = await fetch(`${API_BASE}/api/auth/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ full_name, email, password, confirm_password })
-    });
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(userCredential.user, { displayName: full_name });
 
-    const data = await resp.json().catch(() => ({}));
-
-    if (!resp.ok) {
-      if (data && data.errors) {
-        const firstKey = Object.keys(data.errors)[0];
-        alert(data.errors[firstKey] || JSON.stringify(data.errors));
-      } else {
-        alert(data.error || "Signup failed. Check console/network.");
-      }
-    } else {
-      alert("Account created successfully! Redirecting to login...");
-      window.location.href = "login.html";
-    }
-  } catch (err) {
-    console.error("Network error:", err);
-    alert("Network error — ensure the backend is running at http://127.0.0.1:5000");
+    showToast("Account created successfully! Redirecting...", "#a855f7");
+    setTimeout(() => (window.location.href = "login.html"), 1500);
+  } catch (error) {
+    console.error("Signup error:", error);
+    showToast(error.message || "Signup failed. Please try again.", "crimson");
   } finally {
     submitBtn.disabled = false;
     submitBtn.textContent = "Create Account";
