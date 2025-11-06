@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="profile.css" />
+  </head>
+
+  <body class="hero-gradient">
+    <div class="card">
+      <h1>Edit Profile</h1>
+      <p class="subtitle">Update your college ride-sharing profile</p>
+
+      <div class="grid">
+        <input id="name" placeholder="Full Name" />
+        <input id="email" placeholder="Email" disabled />
+
+        <input id="enroll" placeholder="Enrollment Number" />
+
+        <select id="branch">
+          <option value="">Select Branch</option>
+          <option>CSE</option>
+          <option>ECE</option>
+          <option>IT</option>
+          <option>Biotech</option>
+          <option>BBA</option>
+          <option>VLSI</option>
+          <option>ECE Integrated</option>
+          <option>CSE Integrated</option>
+          <option>ACT</option>
+          <option>MNC</option>
+        </select>
+
+        <select id="year">
+          <option value="">Select Year</option>
+          <option>1st Year</option>
+          <option>2nd Year</option>
+          <option>3rd Year</option>
+          <option>4th Year</option>
+        </select>
+
+        <select id="gender">
+          <option value="">Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+
+        <input id="phone" placeholder="Phone Number" class="full" />
+        <textarea
+          id="travel"
+          class="full"
+          placeholder="Travel Preferences"
+        ></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="primary" onclick="saveProfile()">Save</button>
+        <button class="secondary" onclick="clearProfile()">Clear</button>
+        <button class="secondary" id="signOutBtn">Sign Out</button>
+      </div>
+    </div>
+
+    <script type="module" src="profile.js"></script>
+  </body>
+</html>
