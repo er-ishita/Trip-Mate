@@ -1,70 +1,93 @@
-// Preview uploaded image
-document.getElementById('imgUpload')?.addEventListener('change', function(e){
-    const file = e.target.files[0];
-    if(file){
-        const reader = new FileReader();
-        reader.onload = function(ev){
-            document.getElementById('profilePicPreview').src = ev.target.result;
-        }
-        reader.readAsDataURL(file);
+// ---------- Firebase Setup ----------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCy-qC1V_u8Unnd6h_3t1kLqpdzfgweJ9w",
+  authDomain: "trip-mate-77a45.firebaseapp.com",
+  projectId: "trip-mate-77a45",
+  storageBucket: "trip-mate-77a45.firebasestorage.app",
+  messagingSenderId: "220786589071",
+  appId: "1:220786589071:web:23c005d9a3a4986b675ffa",
+  measurementId: "G-FJ03XG45SY"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ---------- Auth Check ----------
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  // Pre-fill email field and load existing data
+  document.getElementById("email").value = user.email;
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    const data = snap.data();
+    for (const key in data) {
+      const el = document.getElementById(key);
+      if (el) el.value = data[key];
     }
+  }
 });
 
-function saveProfile(){
-    const data = {
-        name: value('name'),
-        email: value('email'),
-        enroll: value('enroll'),
-        branch: value('branch'),
-        year: value('year'),
-        gender: value('gender'),
-        phone: value('phone'),
-        travel: value('travel'),
-        history: value('history')
-    };
+// ---------- Save Profile ----------
+window.saveProfile = async function () {
+  const user = auth.currentUser;
+  if (!user) return alert("Not signed in.");
 
-    const img = document.getElementById('imgUpload').files[0];
+  const data = {
+    name: value("name"),
+    email: value("email"),
+    enroll: value("enroll"),
+    branch: value("branch"),
+    year: value("year"),
+    gender: value("gender"),
+    phone: value("phone"),
+    travel: value("travel"),
+    updatedAt: new Date().toISOString(),
+  };
 
-    if(img){
-        const reader = new FileReader();
-        reader.onload = e => {
-            data.image = e.target.result;
-            storeAndGo(data);
-        };
-        reader.readAsDataURL(img);
-    } else {
-        storeAndGo(data);
-    }
+  try {
+    await setDoc(doc(db, "users", user.uid), data, { merge: true });
+    alert("Profile saved successfully!");
+  } catch (err) {
+    console.error(err);
+    alert("Error saving profile.");
+  }
+};
+
+function value(id) {
+  return document.getElementById(id).value.trim();
 }
 
-function storeAndGo(data){
-    localStorage.setItem("profileData", JSON.stringify(data));
-    window.location.href = "view-profile.html";
-}
+// ---------- Clear Data ----------
+window.clearProfile = function () {
+  const user = auth.currentUser;
+  if (!user) return alert("Not signed in.");
 
-function value(id){ return document.getElementById(id).value; }
+  document.querySelectorAll("input, select, textarea").forEach((el) => (el.value = ""));
+  setDoc(doc(db, "users", user.uid), {}, { merge: true });
+  alert("Profile cleared!");
+};
 
-function clearProfile(){
-    localStorage.removeItem("profileData");
-    alert("Data cleared!");
-}
-
-window.onload = function(){
-    const d = JSON.parse(localStorage.getItem("profileData") || "{}");
-
-    if(document.getElementById("v_name")){
-        set("v_name", d.name);
-        set("v_email", d.email);
-        set("v_enroll", d.enroll);
-        set("v_branch", d.branch);
-        set("v_year", d.year);
-        set("v_gender", d.gender);
-        set("v_phone", d.phone);
-        set("v_travel", d.travel);
-        set("v_history", d.history);
-
-        if(d.image) document.getElementById("profilePic").src = d.image;
-    }
-}
-
-function set(id, val){ document.getElementById(id).innerText = val || ""; }
+// ---------- Sign Out ----------
+document.getElementById("signOutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+  window.location.href = "login.html";
+});
