@@ -31,10 +31,10 @@ Trip-Mate/
 
 | File                                        | Purpose                                                                                       |
 | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **index.html**                              | Main landing page of the app                                                                  |
+| **homepage.html**                              | Main landing page of the app                                                                  |
 | **signup.html / signup.js / signup.css**    | Handles new user registration via Firebase                                                    |
 | **login.html / login.js**                   | Handles user login and authentication                                                         |
-| **homepage.html**                           | Dashboard/homepage after login                                                                |
+| **index.html**                           | Dashboard/homepage after login                                                                |
 | **profile.html / profile.js / profile.css** | Displays and updates user profile details                                                     |
 | **chat.html / chat.js**                     | Real-time chat feature between trip mates                                                     |
 | **trip-actions.js**                         | Contains Firestore operations (adding destinations, trips, etc.)                              |
