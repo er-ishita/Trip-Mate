@@ -130,6 +130,3 @@ Lumina Hackathon(by IEEE)-Project: *Trip-Mate*
 > “Never go solo. Find your trip mate.”
 
 ---
-
-Would you like me to include **Firebase Hosting deployment steps** (so you can publish it live)?
-I can extend the README with that too.
