@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trip Mate | Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: white;
+    }
+
+    .sidebar {
+      width: 300px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      border-radius: 1rem;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 1rem;
+      backdrop-filter: blur(10px);
+      min-width: 0;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+      scrollbar-width: thin;
+      scrollbar-color: #a78bfa transparent;
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: #a78bfa;
+      border-radius: 10px;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 10px 15px;
+      border-radius: 12px;
+      word-wrap: break-word;
+      display: inline-block;
+      position: relative;
+      animation: fadeIn 0.2s ease-in;
+    }
+
+    .message.you {
+      align-self: flex-end;
+      background: #6366f1;
+      color: #fff;
+    }
+
+    .message.other {
+      align-self: flex-start;
+      background: #a78bfa;
+      color: #fff;
+    }
+
+    #chat-title {
+      padding: 15px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.12);
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      min-height: 56px;
+      display:flex;
+      align-items:center;
+    }
+
+    .input-bar {
+      display: flex;
+      padding: 10px 15px;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.08);
+      border-bottom-left-radius: 1rem;
+      border-bottom-right-radius: 1rem;
+    }
+
+    .input-bar input {
+      flex: 1;
+      padding: 10px 15px;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      background: white;
+      color: #111;
+    }
+
+    .input-bar button {
+      padding: 10px 15px;
+      border-radius: 12px;
+      background: #4f46e5;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .input-bar button:hover {
+      background: #4338ca;
+    }
+
+    .chat-item {
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      color: white;
+      overflow-wrap: anywhere;
+    }
+
+    .chat-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .chat-item.active {
+      background: rgba(255, 255, 255, 0.2);
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="flex flex-row h-screen gap-6 p-6">
+
+  <!-- Sidebar -->
+  <div class="sidebar shadow-lg">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-2xl font-bold">Chats</h2>
+    </div>
+    <div id="chat-list" class="flex flex-col gap-2 overflow-y-auto flex-1"></div>
+  </div>
+
+  <!-- Main Chat Section -->
+  <div class="chat-container shadow-xl flex-1 flex">
+    <div style="display:flex;flex-direction:column;flex:1;">
+      <div id="chat-title" class="text-white">Select a chat to start messaging</div>
+      <div id="messages" class="messages"></div>
+      <div class="input-bar">
+        <input id="msg-input" type="text" placeholder="Type a message..." autocomplete="off" />
+        <button id="send-btn" type="button">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- load module after DOM so elements exist -->
+  <script type="module" src="./chat.js"></script>
+</body>
+</html>

@@ -69,7 +69,7 @@ form.addEventListener("submit", async (e) => {
     );
     const user = userCredential.user;
     showToast(`Welcome back, ${user.displayName || "traveler"}!`, "#a855f7");
-    setTimeout(() => (window.location.href = "dashboard.html"), 1500);
+    setTimeout(() => (window.location.href = "index.html"), 1500);
   } catch (error) {
     console.error("Login error:", error);
     showToast("Login failed: " + error.message, "crimson");
