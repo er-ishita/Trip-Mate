@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trip Mate | Find Your College Travel Buddy</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/9.25.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.25.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.25.0/firebase-firestore-compat.js"></script>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #4f46e5 0%, #a855f7 100%);
+    }
+    .text-shadow-custom {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.75);
+      transition: opacity 0.25s ease-in-out;
+    }
+    .modal-open { overflow: hidden; }
+  </style>
+</head>
+
+<body class="min-h-screen">
+  <header class="bg-white shadow-sm sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <div class="text-2xl font-bold text-indigo-600">
+        Trip Mate
+      </div>
+      <a href="profile.html" class="hidden md:inline-block bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition duration-150 shadow-md">
+        View Profile
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-gradient text-white pt-16 pb-24 sm:pt-24 sm:pb-32 relative overflow-hidden rounded-b-3xl">
+      <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+        <span class="inline-block bg-white bg-opacity-20 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wider">College Social Travel</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 text-shadow-custom">Never Go Solo. Find Your Trip Mate.</h1>
+        <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto mb-10 opacity-90">Connect with fellow students heading to the same destination, date, and time.</p>
+
+        <form id="trip-search-form" class="bg-white p-6 md:p-8 rounded-xl shadow-2xl max-w-4xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="destination-input" placeholder="Destination (e.g., Airport, Home City)" required
+              class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-800" />
+            <input type="date" id="date-input" required
+              class="p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-800" />
+            <input type="time" id="time-input" required
+              class="p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-gray-800" />
+          </div>
+          <button type="submit"
+            class="w-full mt-5 bg-purple-600 text-white p-4 rounded-xl font-bold text-lg shadow-lg hover:bg-purple-700 transition duration-300">
+            Find My Trip Mate!
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section class="my-10 max-w-5xl mx-auto px-4">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Explore Your Destination</h2>
+      <div id="map" class="rounded-xl shadow-lg" style="height: 400px; width: 100%;"></div>
+    </section>
+  </main>
+
+  <div id="trip-action-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 transform scale-95">
+      <div class="text-center">
+        <h3 id="modal-title" class="text-2xl font-bold text-gray-900 mb-3">What's Your Next Step?</h3>
+        <p class="text-sm text-gray-500 mb-6">You're planning a trip to <strong id="modal-destination">...</strong> on <strong id="modal-date-time">...</strong>.</p>
+      </div>
+
+      <div id="modal-results" class="mb-4 max-h-72 overflow-y-auto pr-1"></div>
+
+      <div class="space-y-4">
+        <button id="view-existing-btn" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold text-lg">View Existing Trips (Join a Mate)</button>
+        <button id="create-new-btn" class="w-full bg-purple-600 text-white p-4 rounded-xl font-bold text-lg">Create My Trip (Start a Group)</button>
+      </div>
+      <button id="close-modal-btn" class="w-full mt-4 text-sm text-gray-500">Cancel</button>
+    </div>
+  </div>
+
+  <script type="module" src="trip-actions.js"></script>
+</body>
+</html>
