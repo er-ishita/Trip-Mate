@@ -46,7 +46,7 @@ Trip-Mate/
 
 This project uses **Firebase v10** modules (ESM imports).
 
-Your `firebase.js` contains- create on your own local device:
+`firebase.js` contains- create on your own local device:
 
 ```js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
@@ -85,7 +85,7 @@ export { auth, db };
 2. **Open with VS Code Live Server**
 
    * Install the *Live Server* extension in VS Code.
-   * Right-click on `index.html` → **Open with Live Server**.
+   * Right-click on `homepage.html` → **Open with Live Server**.
 
 3. **Test Firebase Connection**
 
@@ -107,8 +107,6 @@ service cloud.firestore {
   }
 }
 ```
-
-> ✅ This allows only authenticated users to read/write data.
 
 ---
 
